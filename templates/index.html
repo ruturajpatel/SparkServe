@@ -1,0 +1,503 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<script type="text/javascript" src="assets/js/header.js"></script>
+<script type="text/javascript" src="assets/js/filemanagement/fileupload.js"> </script>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">SPARK SERVE</a>
+            </div>
+
+            
+        </nav>
+        <!--/. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+                    <li>
+                        <a class="active-menu" href="index.html"><i class="fa fa-dashboard"></i> Create Spark Job</a>
+                    </li>
+                    <li>
+                        <a target="_blank" href="http://199.60.17.159:3000/dashboard/db/server-metrics-collectd?refresh=5s&orgId=1"><i class="fa fa-desktop"></i>Cluster Monitoring</a>
+                    </li>
+					
+
+                    
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper">
+            <div id="page-inner">
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 class="page-header">
+                            Create Spark Job <small>A simple interface</small>
+                        </h1>
+                    </div>
+                </div>
+                <!-- /. ROW  -->
+
+                <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Step 1
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                   <form method="post" enctype="multipart/form-data"  id="forminput" >
+                                    <div class="form-group">
+                                            <label>Upload Input Program <small>(.py)File</small></label>
+                                            <input name="file"  id="input_prog_file" class="upload-file" type="file">
+                                        </div>
+                                        
+                                        <button  class="btn btnFile btn-default">Upload </button>
+
+                                        <small class="upload-prog-status"></small>
+
+                                       </form>
+                                        
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                                <div class="col-lg-6">
+                                <form method="post" enctype="multipart/form-data"  id="formdatainput" >
+                                     <div class="form-group">
+                                            <label>Upload Dataset <small>(zip file preferred, only 1 file allowed for demonstration)</small></label>
+                                            <input name="datafile" id="input_data_file" class="upload-file" type="file">
+
+                                        </div>
+                                        
+                                        <button name="datafile"  class="btn btnDataFile btn-default">Upload </button>
+                                        <small class="upload-data-status"></small>
+
+                                    </form>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Step 2
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                   <form method="post" enctype="multipart/form-data"  id="forminput" >
+                                    <div class="form-group">
+                                            <label>Select Input Program </label>
+                                            <select id="select_input_prog" class="form-control">
+                                            </select>
+                                            <div id="select_prg_msg"></div>
+                                        </div>
+                                        
+                                        
+
+                                        
+
+                                       </form>
+                                        
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                                <div class="col-lg-6">
+                                <form method="post" enctype="multipart/form-data"  id="formdatainput" >
+                                     <div class="form-group">
+                                            <label>Select Dataset </label>
+                                            
+                                            <select id="select_input_data" class="form-control">
+                                            </select>
+                                           <div id="select_data_msg" style="color:red;"></div>
+
+                                        </div>
+                                        
+                                       
+
+
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Step 3
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                   
+                                    <div class="form-group">
+                                            <label>How many Arguments you have for your program? <small>(sys.argv[])</small></label>
+                                            <select id="select_args" class="form-control">
+                                                <option>0</option>
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
+                                            </select>
+                                        </div>
+                                        <button onclick="generate_args()" type="button" class="btn btn-default">Add Arguments </button>
+          
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                                 <div class="col-lg-6" id="form_inputs">
+                                </div>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Step 4
+                        </div>
+                        <div class="panel-body">
+                            <div class="row" >
+                            <div class="col-lg-6">
+                                   
+                                    <div class="form-group">
+                               <label>We are all ready to go !</label>
+                               </div>
+                               <div class="form-group">
+                               <button onclick="submit_job()" type="button" class="btn btn-default">Submit PySpark Job </button>
+                               <input type="hidden" id="job_id" value="" />
+                               </div>
+                               
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+
+                            <div class="col-lg-6">
+                                   
+                                    <div class="form-group">
+                               <label>Job Status</label> <br>
+                               <label> Job Id : <span id="job_id_label"> </span></label><br>
+                               <label> Status : <span id="job_status"> </span></label><br>
+                               <label> Output : <span id="job_output"> </span></label><br>
+                               <label id="job_log"> </label><br>
+
+                               </div>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        </div>
+                        </div>
+                        <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Step 5
+                        </div>
+                        <div class="panel-body">
+                            <div class="row" >
+                            <div class="col-lg-6">
+                                   
+                                    <div class="form-group">
+                               <label>Download the Results</label>
+                               <br>
+                               <input type="button" class="btn btn-success" id="download_results_but" value="Download Results" name="download_results" onclick="download_results()"> 
+
+
+                               </div>
+                               
+                               
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+
+                            
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    </div>
+                </div>
+                <!-- /. ROW  -->
+				<footer><p>SparkServe &copy; 2017 - CMPT 886 Final Project Demo</a></p></footer>
+            </div>
+            <!-- /. PAGE INNER  -->
+        </div>
+        <!-- /. PAGE WRAPPER  -->
+    </div>
+    <!-- /. WRAPPER  -->
+   
+  <script>
+      function generate_args() {
+
+        var a = parseInt($("#select_args").val());
+        $('#form_inputs').html('');
+        for (i = 1; i <= a; i++) {
+            $('#form_inputs').append('<div class="form-group" ><label>Argument '+i+'</label><input class="form-control" id="input_arg_'+i+'" placeholder="Enter args"><label class="checkbox-inline"><input class="form_input_checkbox" onclick="toggle_inputdata_check('+i+')" id="input_data_true_'+i+'" input-no="'+i+'" type="checkbox">Input Data</label><label class="checkbox-inline"><input class="form_output_checkbox" output-no="'+i+'" id="output_data_true_'+i+'" type="checkbox">Output Folder</label></div>');
+        }
+    }
+
+    function toggle_inputdata_check(id){
+        if($('#input_data_true_'+id).is(':checked')){
+            $('#input_arg_'+id).attr('disabled','disabled');
+            $('#input_arg_'+id).val($('#select_input_data').find(":selected").text());
+        }else{
+            $('#input_arg_'+id).val("");
+            $('#input_arg_'+id).removeAttr('disabled');
+        }
+    }
+$(document).ready(function () {
+getProgFiles();
+getDataFiles();
+});
+    function getProgFiles(){
+        $('#select_prg_msg').html("");
+        $('#select_input_prog').html('');
+        $.ajax({
+            url: 'api/files',
+            
+            success: completeHandler = function (data) {
+                 data = JSON.parse(data);
+                        if(data.status == 'success'){
+                            $.each(data.result , function(id,jdata){
+
+                                $('#select_input_prog').append('<option value="'+jdata.id+'">'+jdata.filename+'</option>');
+                            });
+                        }
+                    },
+                    error: errorHandler = function (error1) {
+                        error1 = JSON.parse(error1);
+                        $('#select_prg_msg').html(error1.statusText);
+                    },
+            // Form data
+            // Options to tell jQuery not to process data or worry about the content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
+
+   
+    }
+
+    function getDataFiles(){
+        $('#select_data_msg').html('');
+        $('#select_input_data').html('<option value="0"></option>');
+        $.ajax({
+            url: 'api/datafiles',
+            
+            success: completeHandler = function (data) {
+                    data = JSON.parse(data);
+                if(data.status == 'success'){
+                    $.each(data.result , function(id,jdata){
+
+                        $('#select_input_data').append('<option value="'+jdata.id+'">'+jdata.filename+'</option>');
+                    });
+                }
+                     
+                    },
+                    error: errorHandler = function (error1) {
+                        error1 = JSON.parse(error1);
+                        $('#select_data_msg').html(error1.statusText);
+                    },
+            // Form data
+            // Options to tell jQuery not to process data or worry about the content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
+
+    }
+
+    function submit_job(){
+        var input_file = $('#select_input_prog').val();
+        var input_data = $('#select_input_data').val();
+
+        var data = new FormData();
+       
+        var jsonObj = {};
+            
+        allargs = [];   
+        $('.form_input_checkbox').each(function () {
+          
+        if($(this).is(':checked')){
+            var i = $(this).attr('input-no');
+            inargs = {};
+            inargs['seq'] = i;
+            inargs['type'] = 'file';
+            inargs['argument'] = input_data;
+            
+            allargs.push(inargs);
+        }else {
+            var i = $(this).attr('input-no');
+            inargs = {};
+            if($('#output_data_true_'+i).is(':checked')){
+                inargs['type'] = 'output';
+            }else{
+                inargs['type'] = 'value';
+            }
+            
+            inargs['seq'] = i;
+            
+            inargs['argument'] = $('#input_arg_'+i).val();
+            
+           allargs.push(inargs);
+            
+        }
+    });
+
+        jsonObj['args'] =allargs;
+
+        console.log(JSON.stringify(jsonObj));
+        $('#job_id').val("");
+        $('#job_id_label').html("");
+        $('#job_status').html(""); 
+         $('#job_output').html('');
+        $.ajax({
+            url: 'api/file/'+input_file+'/execute',
+            type: 'POST',
+            data: JSON.stringify(jsonObj),
+
+            success: completeHandler = function (data) {
+                    data = JSON.parse(data);
+                    $('#job_status').css('color','black'); 
+                    $('#job_log').html("");
+                if(data.status == 'success'){
+                    
+                    var result = data.result;
+
+                    $('#job_id').val(result.id);
+                    $('#job_id_label').html(result.id);
+                    
+
+                    if(result.state == 'success'){
+                        $('#job_status').css('color','green');
+                        $('#job_status').html(result.state);  
+                        alert('Job Completed');
+                        $('#job_output').html('<pre>'+result.print+'</pre>');
+                        $('#download_results_but').show();
+                        
+                    }else if(result.state == 'dead'){
+                        $('#job_status').css('color','red');
+                        $('#job_status').html(result.state);
+                        $('#job_log').html("Error: <pre>"+result.print+"</pre><br>Log: <pre>"+result.log+'</pre>'); 
+                        $('#download_results_but').hide();
+                        
+                    }else{
+                        $('#job_status').html(result.state+'...');
+                        checkStatus(input_file, result.id);
+                        $('#download_results_but').hide();
+                    }
+                    
+                }
+                     
+                    },
+                    error: errorHandler = function (error1) {
+                        error1 = JSON.parse(error1);
+                        alert(error1.statusText);
+                    },
+            // Form data
+            // Options to tell jQuery not to process data or worry about the content-type
+            cache: false,
+            contentType: false,
+            processData: false
+        }, 'json');
+    }
+
+
+    var interval = 10000;  // 1000 = 1 second, 3000 = 3 seconds
+    var chk = true;
+function checkStatus(fileid, execid) {
+    $.ajax({
+            
+            url: 'api/file/'+fileid+'/'+execid+'/status',
+            success: function (data) {
+
+                    data = JSON.parse(data);
+                    $('#job_status').css('color','black'); 
+                if(data.status == 'success'){
+                    
+                    var result = data.result;
+
+                    $('#job_id').val(result.id);
+                    $('#job_id_label').html(result.id);
+                    
+                    if(result.state == 'success'){
+                         $('#job_status').css('color','green'); 
+                         $('#job_status').html(result.state);  
+                         $('#job_output').html('<pre>'+result.print+'</pre>');
+                        alert('Job Completed');
+                        $('#download_results_but').show();
+                        
+                        
+                    }else if(result.state == 'dead'){
+                        $('#job_status').css('color','red'); 
+                        $('#job_status').html(result.state); 
+                        $('#job_log').html("Error: <pre>"+result.print+"</pre><br>Log: <pre>"+result.log+'</pre>'); 
+                        $('#download_results_but').hide(); 
+                       
+                    }else{
+                        $('#job_status').html(result.state+'...');  
+                        $('#download_results_but').hide();
+                        setTimeout(checkStatus(fileid, execid), interval);
+                    }
+
+                    
+                }
+                   
+            },
+            complete: function (data) {
+                    // Schedule the next
+                    
+            }
+    });
+}
+
+    function download_results(){
+        var job_id = $('#job_id').val();
+
+        $.ajax({
+            
+            url: 'api/file/'+job_id+'/output',
+            success: function (data) {
+
+                    data = JSON.parse(data);
+                    
+                if(data.status == 'fail'){
+                    result = data.result;
+
+                    alert('Download Failed ' +result.message + " , Please try again");
+                   
+
+                    
+                }else if(data.status == 'success'){
+                    window.open('http://'+window.location.hostname+':'+location.port+'/api/file/'+job_id+'/output/download', '_blank');
+                }
+                   
+            },
+            complete: function (data) {
+                    // Schedule the next
+
+                    
+            }
+    });
+
+    }
+
+    </script>
+
+
+</body>
+
+</html>
